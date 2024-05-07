@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head></head>
+
+    <body>
+<table>
+    <thead>
+        <tr>
+          <th>nombre</th>
+          <th>apellidos</th>
+          <th>edad</th>
+          <th>ciudad</th>
+        </tr>
+      </thead>
+ <tbody>
+    <tr >
+      <th id="nombre"></th>
+      <th id="apellidos"></th>
+      <th id="edad"></th>
+      <th id="ciudad" ></th>
+    </tr>
+    </tbody>
+  </table>
+</body>
+<script>
+
+    persona= {nombre:"paco",apellidos:"paco",edad:3,ciudad:"muna"};
+    personaJSON=JSON.stringify(persona);
+    console.log(persona);
+    console.log(personaJSON);
+    persona2= JSON.parse(personaJSON);
+    console.log(personaJSON);
+    document.getElementById("nombre").innerHTML=persona2.nombre;
+    document.getElementById("apellidos").innerHTML=persona2.apellidos;
+    document.getElementById("edad").innerHTML=persona2.edad;
+    document.getElementById("ciudad").innerHTML=persona2.ciudad;
+
+
+</script>
+</html>
