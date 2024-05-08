@@ -26,6 +26,8 @@
   <form id="formulario">
     <label for="nombre">Nombre:</label>
     <input type="text" id="nombre" name="nombre"><br>
+    <label for="apellido">apellido:</label>
+    <input type="text" id="apellido" name="apellido"><br>
     <label for="edad">Edad:</label>
     <input type="number" id="edad" name="edad"><br>
     <label for="ciudad">Ciudad:</label>
@@ -37,6 +39,7 @@
     <thead>
       <tr>
         <th>Nombre</th>
+        <th>apellido</th>
         <th>Edad</th>
         <th>Ciudad</th>
         <th>hobbie</th>
@@ -51,7 +54,9 @@
 
   function agregarPersona() {
     let nombre = document.getElementById("nombre").value;
+    let apellido = document.getElementById("apellido").value;
     let edad = document.getElementById("edad").value;
+    
     let ciudad = document.getElementById("ciudad").value;
     let hobbie = document.querySelector('input[name="pregunta1"]:checked').value;
     let nuevaPersona = { nombre, edad, ciudad,hobbie };
@@ -61,6 +66,7 @@
     document.getElementById("cuerpoTabla").innerHTML += nuevaFila;
 
     document.getElementById("nombre").value = "";
+    document.getElementById("apellido").value = "";
     document.getElementById("edad").value = "";
     document.getElementById("ciudad").value = "";
     document.getElementById("hobbie").value = "";
@@ -73,6 +79,7 @@
   function generaTr(persona) {
     return "<tr>"+
              "<td>" + persona.nombre + "</td>"+
+             "<td>" + persona.apellido + "</td>" +
              "<td>" + persona.edad + "</td>" +
              "<td>" + persona.ciudad + "</td>" +
              "<td>" + persona.hobbie + "</td>" +
