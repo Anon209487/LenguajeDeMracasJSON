@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Act3</title>
+</head>
+<body>
+  <h1>Act3
+  </h1>
+  <form  id="procesar_formulario" action="procesar_formulario.php" >
+    <label id="Hobbies" for="pregunta1">Hobbies</label>
+    <input type="radio" id="deporte" name="pregunta1" value="deporte" required>
+    <label for="pregunta1">deporte</label>
+    <input type="radio" id="lectura" name="pregunta1" value="lectura">
+    <label for="pregunta1">lectura</label>
+    <input type="radio" id="musica" name="pregunta1" value="musica">
+    <label for="pregunta1">musica</label>
+    <input type="radio" id="juegos" name="pregunta1" value="juegos">
+    <label for="pregunta1">juegos</label>
+    <input type="radio" id="cine" name="pregunta1" value="cine">
+    <label for="pregunta1">cine</label>
+    <input type="radio" id="teatro" name="pregunta1" value="teatro">
+    <label for="pregunta1">teatro</label>
+    <input type="radio" id="coleccionismo" name="pregunta1" value="coleccionismo">
+    <label for="pregunta1">coleccionismo</label>
+</form>
+  <form id="formulario">
+    <label for="nombre">Nombre:</label>
+    <input type="text" id="nombre" name="nombre"><br>
+    <label for="edad">Edad:</label>
+    <input type="number" id="edad" name="edad"><br>
+    <label for="ciudad">Ciudad:</label>
+    <input type="text" id="ciudad" name="ciudad"><br>
+    <input type="button" value="nueva"  value="Enviar" onclick="agregarPersona()">
+  </form>
+
+  <table id="tabla">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Edad</th>
+        <th>Ciudad</th>
+        <th>hobbie</th>
+      </tr>
+    </thead>
+    <tbody id="cuerpoTabla">
+    </tbody>
+  </table>
+ 
+<script>
+  let personas = []; 
+
+  function agregarPersona() {
+    let nombre = document.getElementById("nombre").value;
+    let edad = document.getElementById("edad").value;
+    let ciudad = document.getElementById("ciudad").value;
+    let hobbie = document.querySelector('input[name="pregunta1"]:checked').value;
+    let nuevaPersona = { nombre, edad, ciudad,hobbie };
+    personas.push(nuevaPersona);
+
+    let nuevaFila = generaTr(nuevaPersona);
+    document.getElementById("cuerpoTabla").innerHTML += nuevaFila;
+
+    document.getElementById("nombre").value = "";
+    document.getElementById("edad").value = "";
+    document.getElementById("ciudad").value = "";
+    document.getElementById("hobbie").value = "";
+
+  }
+
+
+
+
+  function generaTr(persona) {
+    return "<tr>"+
+             "<td>" + persona.nombre + "</td>"+
+             "<td>" + persona.edad + "</td>" +
+             "<td>" + persona.ciudad + "</td>" +
+             "<td>" + persona.hobbie + "</td>" +
+           "</tr>"; 
+  }
+
+
+  hobbies: $('input[name="hobbies"]')
+.filter(':checked')
+.map(function () {
+          return $(this).val();
+     }
+).get()
+
+
+</script>
+</body>
+</html>
