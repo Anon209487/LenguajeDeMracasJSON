@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <void id="void"></void>
+
+    <p id="texto"></p>
+    <void id="void2"></void>
+    <script defer>
+
+
+        // Definir un objeto JavaScript
+        let persona = {
+        apellido: "Juan",
+        edad: 30,
+        ciudad: "Madrid "
+                            };
+        let personaJSON = JSON.stringify(persona);
+        console.log(personaJSON);
+        personaObjetojavascrip= JSON.parse(personaJSON);
+        document.getElementById("texto").innerHTML=personaObjetojavascrip.ciudad;
+        //declarar constante 
+        const pi=3.14;
+        //declarar variables 
+        let nombre ="neos";
+        let edad =20;
+        //concatenacion de variables
+        let nombreEdad= "nombre: " +nombre +  " edad: "+edad;
+        //imprimir en consola
+        console.log(nombre);
+        console.log(pi);
+        //imprimir en el html por id 
+        document.getElementById("texto").innerHTML+=nombreEdad;
+        //insetar codigo html 
+        let datos = document.getElementById('void');
+        datos.innerHTML = `
+             <h1>  ${nombreEdad}</h1> 
+             <h2>  mi edad ${edad}   ${pi} mi nombre  es ${nombre} </h2>
+            `;
+        //condiciones 
+        if (edad>18) {
+         datos.innerHTML += `eres mayor de edad `;
+        }
+        //bucles 
+        let contador;
+        for (contador=1;contador<=10;contador++){
+        datos.innerHTML += `<p> contador: ${contador} </p>`
+        }
+        //arary
+        let hobbies =  [" videojuegos"," gym "," dormir "];
+        document.getElementById("texto").innerHTML+=hobbies[0] + hobbies[2];
+        //funciones 
+
+        const crearLista =(hobbies) =>{
+        let lista2 = `
+             <p> lista de hobbies :</p>
+             <ul>
+                <li>${hobbies[0]}</li>
+                <li>${hobbies[1]}</li>
+                <li>${hobbies[2]}</li>
+                </ul>
+                                          `;
+        return lista2;
+        };
+        let lista1 =crearLista(hobbies);
+
+        document.getElementById("void2").innerHTML = lista1;
+    </script>
+
+</body>
+</html>
