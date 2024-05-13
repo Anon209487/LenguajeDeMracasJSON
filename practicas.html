@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>pokemon</title>
+</head>
+<body>
+  <h1>pokemon</h1>
+  <button onclick="solicitud()"> solicitud</button>
+<div id="pokemons"> </div>
+ 
+<script>
+function solicitud() {
+    const xhr = new XMLHttpRequest();
+    xhr.open("GET", "https://pokeapi.co/api/v2/pokemon/ditto");
+    xhr.responseType = "json";
+    xhr.onload = function() {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            datosPkemon = xhr.response;
+            console.log("envío correcto " + datosPkemon);
+            imprimirDatos(datosPkemon)
+             console.log("envío correcto " + datosPkemon);
+        } else {
+            console.log("Error: " + xhr.status);
+        }
+    };
+    xhr.send();
+}
+
+function toObject(datosPkemon) {
+    return JSON.parse(toJSON);
+}
+function toJSON(datosPkemon) {
+    return JSON.stringify(datosPkemon);
+}
+function imprimirDatos(datosPokemon) {
+    var abilities = datosPokemon.abilities;
+    var index =  datosPokemon.game_indices;
+    var output = "";
+    for (var i = 0; i < abilities.length; i++) {
+        output +=" habilidades: "+ abilities[i].ability.name+ " url: " + abilities[i].ability.url+ + " is_hidden: " + abilities[i].is_hidden + " slot: " + abilities[i].slot + " <br> "  ;
+    }
+    for (var i = 0; i < index.length; i++) {
+        output += "indices pokedex:" + index[i].game_index +  " , ";
+    }
+    document.getElementById("pokemons").innerHTML = output;
+}
+</script>
+</body>
+</html>
+
+
