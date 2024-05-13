@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Act3</title>
+</head>
+<body>
+  <h1>Act3</h1>
+  <form id="procesar_formulario" action="procesar_formulario.php">
+    <label for="pregunta1">Hobbies:</label><br>
+    <input type="radio" id="deporte" name="pregunta1" value="deporte" required>
+    <label for="deporte">Deporte</label><br>
+    <input type="radio" id="lectura" name="pregunta1" value="lectura">
+    <label for="lectura">Lectura</label><br>
+    <input type="radio" id="musica" name="pregunta1" value="musica">
+    <label for="musica">Música</label><br>
+    <input type="radio" id="juegos" name="pregunta1" value="juegos">
+    <label for="juegos">Juegos</label><br>
+    <input type="radio" id="cine" name="pregunta1" value="cine">
+    <label for="cine">Cine</label><br>
+    <input type="radio" id="teatro" name="pregunta1" value="teatro">
+    <label for="teatro">Teatro</label><br>
+    <input type="radio" id="coleccionismo" name="pregunta1" value="coleccionismo">
+    <label for="coleccionismo">Coleccionismo</label><br>
+  </form>
+  <form id="formulario">
+    <label for="nombre">Nombre:</label>
+    <input type="text" id="nombre" name="nombre"><br>
+    <label for="apellido">Apellido:</label>
+    <input type="text" id="apellido" name="apellido"><br>
+    <label for="edad">Edad:</label>
+    <input type="number" id="edad" name="edad"><br>
+    <label for="ciudad">Ciudad:</label>
+    <input type="text" id="ciudad" name="ciudad"><br>
+    <input type="button" value="Enviar" onclick="agregarPersona()">
+
+  </form>
+
+  <table id="tabla">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Apellido</th>
+        <th>Edad</th>
+        <th>Ciudad</th>
+        <th>Hobbie</th>
+      </tr>
+    </thead>
+    <tbody id="cuerpoTabla">
+    </tbody>
+  </table>
+ <void id="datos"></void>
+<script>
+  let personas = []; 
+
+  function agregarPersona() {
+    let nombre = document.getElementById("nombre").value;
+    let apellido = document.getElementById("apellido").value;
+    let edad = document.getElementById("edad").value;
+    let ciudad = document.getElementById("ciudad").value;
+    let hobbie = document.querySelector('input[name="pregunta1"]:checked');
+    if (hobbie) {
+      hobbie = hobbie.value;
+    } else {
+      hobbie = "";
+    }
+    let nuevaPersona = { nombre, apellido, edad, ciudad, hobbie };
+    personas.push(nuevaPersona);
+    //envio
+    envio(nuevaPersona);
+    let nuevaFila = generaTr(nuevaPersona);
+    document.getElementById("cuerpoTabla").innerHTML += nuevaFila;
+
+    document.getElementById("nombre").value = "";
+    document.getElementById("apellido").value = "";
+    document.getElementById("edad").value = "";
+    document.getElementById("ciudad").value = "";
+    document.querySelector('input[name="pregunta1"]:checked').checked = false;
+  }
+
+  function generaTr(persona) {
+    return "<tr>"+
+             "<td>" + persona.nombre + "</td>"+
+             "<td>" + persona.apellido + "</td>" +
+             "<td>" + persona.edad + "</td>" +
+             "<td>" + persona.ciudad + "</td>" +
+             "<td>" + persona.hobbie + "</td>" +
+           "</tr>"; 
+  }
+</script>
+
+
+<script>
+
+function envio(objeto_js){
+   	const xhr = new XMLHttpRequest();
+   	xhr.open("POST", "https://jsonplaceholder.typicode.com/posts");
+	xhr.responseType = "json"; // Si no se indica, necesitará parseo
+
+// Preparamos a continuación la respuesta
+   	xhr.onload = function() {
+       	if (xhr.readyState == 4 && xhr.status == 201) { // 200 || 201
+           	console.log("evio correcto " +xhr.response );
+               solicitud();
+       	} else {
+           	console.log("Error: ${xhr.status}");
+       	}
+   	};
+   	xhr.send(JSON.stringify(objeto_js));
+}
+
+
+function solicitud() {
+    const xhr = new XMLHttpRequest();
+    xhr.open("GET", "https://jsonplaceholder.typicode.com/posts");
+    xhr.responseType = "json";
+
+    xhr.onload = function() {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            let data = xhr.response;
+            console.log("Recepción:", data);
+            
+            // Mostrar los títulos de los posts
+            let titles = data.map(post => post.title);
+            document.getElementById("datos").innerHTML = titles.join("<br>");
+        } else {
+            console.log("Error:", xhr.status);
+        }
+    };
+    xhr.send();
+}
+
+</script>
+</body>
+</html>

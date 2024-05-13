@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <title>Agregar Datos a la Tabla</title>
+    <title>megareto2</title>
 </head>
 <body>
     <h2>Formulario para Agregar Datos a la Tabla</h2>
@@ -32,26 +32,25 @@
             </tr>
         </thead>
         <tbody id="tabla-datos">
-            <!-- Aquí se agregan filas dinámicamente -->
+
         </tbody>
     </table>
 
     <script>
-        // Seleccionamos el formulario y la tabla
+     
         const formulario = document.getElementById('formulario');
         const tablaDatos = document.getElementById('tabla-datos');
 
-        // Agregar evento para el formulario (cuando se envíe)
+  
         formulario.addEventListener('submit', function(event) {
-            event.preventDefault(); // Prevenir recarga de la página
-
-            // Obtener los datos del formulario
+            event.preventDefault(); 
+     
             const nombre = document.getElementById('nombre').value;
             const apellidos = document.getElementById('apellidos').value;
             const edad = parseInt(document.getElementById('edad').value, 10);
             const ciudad = document.getElementById('ciudad').value;
 
-            // Crear una nueva fila
+       
             const nuevaFila = document.createElement('tr');
             nuevaFila.innerHTML = `
                 <td>${nombre}</td>
@@ -60,10 +59,10 @@
                 <td>${ciudad}</td>
             `;
 
-            // Añadir la nueva fila a la tabla
+           
             tablaDatos.appendChild(nuevaFila);
 
-            // Limpiar el formulario después de agregar la fila
+        
             formulario.reset();
         });
 
