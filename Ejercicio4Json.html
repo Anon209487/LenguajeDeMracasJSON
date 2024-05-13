@@ -1,114 +1,134 @@
 <!DOCTYPE html>
-<html lang="es">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Envío de datos a servidor</title>
+  <title>Act3</title>
 </head>
 <body>
-    <h1>Envío de datos a servidor</h1>
-    <form id="formulario">
-        <label for="descripcion">Descripción:</label>
-        <input type="text" id="descripcion" required><br><br>
+  <h1>Act3</h1>
+  <form id="procesar_formulario" action="procesar_formulario.php">
+    <label for="pregunta1">Hobbies:</label><br>
+    <input type="radio" id="deporte" name="pregunta1" value="deporte" required>
+    <label for="deporte">Deporte</label><br>
+    <input type="radio" id="lectura" name="pregunta1" value="lectura">
+    <label for="lectura">Lectura</label><br>
+    <input type="radio" id="musica" name="pregunta1" value="musica">
+    <label for="musica">Música</label><br>
+    <input type="radio" id="juegos" name="pregunta1" value="juegos">
+    <label for="juegos">Juegos</label><br>
+    <input type="radio" id="cine" name="pregunta1" value="cine">
+    <label for="cine">Cine</label><br>
+    <input type="radio" id="teatro" name="pregunta1" value="teatro">
+    <label for="teatro">Teatro</label><br>
+    <input type="radio" id="coleccionismo" name="pregunta1" value="coleccionismo">
+    <label for="coleccionismo">Coleccionismo</label><br>
+  </form>
+  <form id="formulario">
+    <label for="nombre">Nombre:</label>
+    <input type="text" id="nombre" name="nombre"><br>
+    <label for="apellido">Apellido:</label>
+    <input type="text" id="apellido" name="apellido"><br>
+    <label for="edad">Edad:</label>
+    <input type="number" id="edad" name="edad"><br>
+    <label for="ciudad">Ciudad:</label>
+    <input type="text" id="ciudad" name="ciudad"><br>
+    <input type="button" value="Enviar" onclick="agregarPersona()">
 
-        <label for="idProveedor">ID Proveedor:</label>
-        <input type="number" id="idProveedor" required><br><br>
+  </form>
 
-        <label for="precio">Precio:</label>
-        <input type="number" id="precio" step="0.01" required><br><br>
+  <table id="tabla">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Apellido</th>
+        <th>Edad</th>
+        <th>Ciudad</th>
+        <th>Hobbie</th>
+      </tr>
+    </thead>
+    <tbody id="cuerpoTabla">
+    </tbody>
+  </table>
+ <void id="datos"></void>
+<script>
+  let personas = []; 
 
-        <button type="submit">Enviar</button>
-    </form>
+  function agregarPersona() {
+    let nombre = document.getElementById("nombre").value;
+    let apellido = document.getElementById("apellido").value;
+    let edad = document.getElementById("edad").value;
+    let ciudad = document.getElementById("ciudad").value;
+    let hobbie = document.querySelector('input[name="pregunta1"]:checked');
+    if (hobbie) {
+      hobbie = hobbie.value;
+    } else {
+      hobbie = "";
+    }
+    let nuevaPersona = { nombre, apellido, edad, ciudad, hobbie };
+    personas.push(nuevaPersona);
+    //envio
+    envio(nuevaPersona);
+    let nuevaFila = generaTr(nuevaPersona);
+    document.getElementById("cuerpoTabla").innerHTML += nuevaFila;
 
-    <h2 id="error" style="color: red; font-weight: bold;"></h2>
+    document.getElementById("nombre").value = "";
+    document.getElementById("apellido").value = "";
+    document.getElementById("edad").value = "";
+    document.getElementById("ciudad").value = "";
+    document.querySelector('input[name="pregunta1"]:checked').checked = false;
+  }
 
-    <h2>Lista de productos:</h2>
-    <table id="tablaProductos" border="1">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Descripción</th>
-                <th>ID Proveedor</th>
-                <th>Precio</th>
-            </tr>
-        </thead>
-        <tbody id="tbodyProductos">
-        </tbody>
-    </table>
+  function generaTr(persona) {
+    return "<tr>"+
+             "<td>" + persona.nombre + "</td>"+
+             "<td>" + persona.apellido + "</td>" +
+             "<td>" + persona.edad + "</td>" +
+             "<td>" + persona.ciudad + "</td>" +
+             "<td>" + persona.hobbie + "</td>" +
+           "</tr>"; 
+  }
+</script>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            obtenerProductos();
-        });
 
-        document.getElementById("formulario").addEventListener("submit", function(event) {
-            event.preventDefault();
+<script>
 
-            const descripcion = document.getElementById("descripcion").value.trim();
-            const idProveedor = parseInt(document.getElementById("idProveedor").value.trim());
-            const precio = parseFloat(document.getElementById("precio").value.trim());
+function envio(objeto_js){
+   	const xhr = new XMLHttpRequest();
+   	xhr.open("POST", "https://jsonplaceholder.typicode.com/posts");
+	xhr.responseType = "json"; // Si no se indica, necesitará parseo
 
-            const datos = {
-                descripcion: descripcion,
-                idProveedor: idProveedor,
-                precio: precio
-            };
+// Preparamos a continuación la respuesta
+   	xhr.onload = function() {
+       	if (xhr.readyState == 4 && xhr.status == 201) { // 200 || 201
+           	console.log("evio correcto " +xhr.response );
+               solicitud();
+       	} else {
+           	console.log("Error: ${xhr.status}");
+       	}
+   	};
+   	xhr.send(JSON.stringify(objeto_js));
+}
 
-            fetch("https://lm.iesnervion.es/reto4.php", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(datos)
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.error === null) {
-                    mostrarProductos(data.lista);
-                } else {
-                    mostrarError(data.error);
-                }
-            })
-            .catch(error => {
-                mostrarError("Error de conexión");
-            });
-        });
 
-        function obtenerProductos() {
-            fetch("https://lm.iesnervion.es/reto4.php")
-            .then(response => response.json())
-            .then(data => {
-                if (data.error === null) {
-                    mostrarProductos(data.lista);
-                } else {
-                    mostrarError(data.error);
-                }
-            })
-            .catch(error => {
-                mostrarError("Error de conexión");
-            });
+function solicitud() {
+    const xhr = new XMLHttpRequest();
+    xhr.open("GET", "https://jsonplaceholder.typicode.com/posts");
+    xhr.responseType = "json";
+
+    xhr.onload = function() {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            let data = xhr.response;
+            console.log("Recepción:", data);
+            
+            // Mostrar los títulos de los posts
+            let titles = data.map(post => post.title);
+            document.getElementById("datos").innerHTML = titles.join("<br>");
+        } else {
+            console.log("Error:", xhr.status);
         }
+    };
+    xhr.send();
+}
 
-        function mostrarProductos(productos) {
-            const tbody = document.getElementById("tbodyProductos");
-            tbody.innerHTML = "";
-
-            productos.forEach(producto => {
-                const fila = document.createElement("tr");
-                fila.innerHTML = `
-                    <td>${producto.id}</td>
-                    <td>${producto.descripcion}</td>
-                    <td>${producto.idProveedor}</td>
-                    <td>${producto.precio}</td>
-                `;
-                tbody.appendChild(fila);
-            });
-        }
-
-        function mostrarError(error) {
-            const errorElement = document.getElementById("error");
-            errorElement.textContent = error;
-        }
-    </script>
+</script>
 </body>
 </html>
