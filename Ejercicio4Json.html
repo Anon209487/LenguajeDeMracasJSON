@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Envío de datos a servidor</title>
+</head>
+<body>
+    <h1>Envío de datos a servidor</h1>
+    <form id="formulario">
+        <label for="descripcion">Descripción:</label>
+        <input type="text" id="descripcion" required><br><br>
+
+        <label for="idProveedor">ID Proveedor:</label>
+        <input type="number" id="idProveedor" required><br><br>
+
+        <label for="precio">Precio:</label>
+        <input type="number" id="precio" step="0.01" required><br><br>
+
+        <button type="submit">Enviar</button>
+    </form>
+
+    <h2 id="error" style="color: red; font-weight: bold;"></h2>
+
+    <h2>Lista de productos:</h2>
+    <table id="tablaProductos" border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Descripción</th>
+                <th>ID Proveedor</th>
+                <th>Precio</th>
+            </tr>
+        </thead>
+        <tbody id="tbodyProductos">
+        </tbody>
+    </table>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            obtenerProductos();
+        });
+
+        document.getElementById("formulario").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            const descripcion = document.getElementById("descripcion").value.trim();
+            const idProveedor = parseInt(document.getElementById("idProveedor").value.trim());
+            const precio = parseFloat(document.getElementById("precio").value.trim());
+
+            const datos = {
+                descripcion: descripcion,
+                idProveedor: idProveedor,
+                precio: precio
+            };
+
+            fetch("https://lm.iesnervion.es/reto4.php", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(datos)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error === null) {
+                    mostrarProductos(data.lista);
+                } else {
+                    mostrarError(data.error);
+                }
+            })
+            .catch(error => {
+                mostrarError("Error de conexión");
+            });
+        });
+
+        function obtenerProductos() {
+            fetch("https://lm.iesnervion.es/reto4.php")
+            .then(response => response.json())
+            .then(data => {
+                if (data.error === null) {
+                    mostrarProductos(data.lista);
+                } else {
+                    mostrarError(data.error);
+                }
+            })
+            .catch(error => {
+                mostrarError("Error de conexión");
+            });
+        }
+
+        function mostrarProductos(productos) {
+            const tbody = document.getElementById("tbodyProductos");
+            tbody.innerHTML = "";
+
+            productos.forEach(producto => {
+                const fila = document.createElement("tr");
+                fila.innerHTML = `
+                    <td>${producto.id}</td>
+                    <td>${producto.descripcion}</td>
+                    <td>${producto.idProveedor}</td>
+                    <td>${producto.precio}</td>
+                `;
+                tbody.appendChild(fila);
+            });
+        }
+
+        function mostrarError(error) {
+            const errorElement = document.getElementById("error");
+            errorElement.textContent = error;
+        }
+    </script>
+</body>
+</html>

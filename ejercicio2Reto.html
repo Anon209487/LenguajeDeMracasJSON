@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head></head>
+<body>
+<table id="tabla">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Apellidos</th>
+            <th>Edad</th>
+            <th>Ciudad</th>
+            <th>Acción</th>
+        </tr>
+    </thead>
+    <tbody id="tbody">
+    </tbody>
+</table>
+
+<form id="formulario">
+    <input type="text" id="nombreInput" placeholder="Nombre">
+    <input type="text" id="apellidosInput" placeholder="Apellidos">
+    <input type="number" id="edadInput" placeholder="Edad">
+    <input type="text" id="ciudadInput" placeholder="Ciudad">
+    <button type="button" onclick="agregarPersona()">Agregar Persona</button>
+</form>
+
+<p id="info"></p>
+
+<script>
+    function validarCampos() {
+        const nombre = document.getElementById("nombreInput").value.trim();
+        const apellidos = document.getElementById("apellidosInput").value.trim();
+        const edad = document.getElementById("edadInput").value.trim();
+        const ciudad = document.getElementById("ciudadInput").value.trim();
+
+        if (!nombre || !apellidos || !edad || !ciudad) {
+            alert("Todos los campos son obligatorios");
+            return false;
+        }
+
+        return true;
+    }
+
+    function eliminarFila(event) {
+        const fila = event.target.parentNode.parentNode;
+        fila.parentNode.removeChild(fila);
+        calcularEstadisticas();
+    }
+
+    function agregarPersona() {
+        if (!validarCampos()) return;
+
+        const nombre = document.getElementById("nombreInput").value.trim();
+        const apellidos = document.getElementById("apellidosInput").value.trim();
+        const edad = parseInt(document.getElementById("edadInput").value.trim());
+        const ciudad = document.getElementById("ciudadInput").value.trim();
+
+        const tbody = document.getElementById("tbody");
+        const nuevaFila = document.createElement("tr");
+
+        nuevaFila.innerHTML = `
+            <td>${nombre}</td>
+            <td>${apellidos}</td>
+            <td>${edad}</td>
+            <td>${ciudad}</td>
+            <td><button onclick="eliminarFila(event)">Eliminar</button></td>
+        `;
+
+        tbody.appendChild(nuevaFila);
+        calcularEstadisticas();
+    }
+
+    function calcularEstadisticas() {
+        const edades = Array.from(document.querySelectorAll("#tabla tbody td:nth-child(3)")).map(td => parseInt(td.textContent));
+        const suma = edades.reduce((acc, edad) => acc + edad, 0);
+        const media = suma / edades.length;
+        const maximo = Math.max(...edades);
+        const minimo = Math.min(...edades);
+
+        document.getElementById("info").innerHTML = `Suma de edades: ${suma}, Media: ${media}, Máximo: ${maximo}, Mínimo: ${minimo}`;
+    }
+</script>
+</body>
+</html>
