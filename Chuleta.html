@@ -69,6 +69,76 @@
         let lista1 =crearLista(hobbies);
 
         document.getElementById("void2").innerHTML = lista1;
+
+
+         // soclicitud recibir 
+          function solicitud() {
+          const xhr = new XMLHttpRequest();
+          xhr.open("GET", "https://pokeapi.co/api/v2/pokemon/pikachu");
+          xhr.responseType = "json";
+          xhr.onload = function() {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+          datos = xhr.response;
+          toJSON(datos);
+        } else {
+          console.log("Error: " + xhr.status);
+        }
+         };
+           xhr.send();
+    }
+
+       function toJSON(datos) {
+        JSONpokemon = JSON.stringify(datos, null, 2);
+          document.getElementById("id").innerHTML = "<pre>" + datos + "</pre>";
+    }
+         // soclicitud recibir 2
+        function solicitud() {
+             fetch('https://jsonplaceholder.typicode.com/posts')
+             .then(response => response.json())
+             .then(json => {
+                  console.log(json);
+                  agregar(json) ;
+                });
+        }
+
+          function agregar(datos) {
+            $("tbody").empty();
+            datos.forEach(dato => {
+                $("tbody").append('<tr id="' + dato.id + '" onclick="borrar(' + dato.id + ')">' +
+                    '<td>' + dato.id + '</td>' +
+                    '<td>' + dato.name + '</td>' +
+                    '<td>' + dato.username + '</td>' +
+                    '<td>' + dato.email + '</td>' +
+                    '<td>' + dato.address.street + ' ' + dato.address.suite + ', ' + dato.address.zipcode + '</td>' +
+                    '<td>' + dato.company.name + ' - ' + dato.company.catchPhrase + ' - ' + dato.company.bs + '</td>' +
+                    '</tr>');
+            });
+        }
+        //enviar datos
+        function creardatos() {
+            const objetoJavaScrip = {
+               dato1: $("#dato1").val(),
+               dato2: $("#dato1").val(),
+               dato3: $("#precio").val()
+             };
+              const JSON = toJSON(objetoJavaScrip);
+              envio(JSON);
+                        }
+         function envio(nuevosDatos) {
+             const xhr = new XMLHttpRequest();
+             xhr.open("POST", "https://lm.iesnervion.es/reto4.php");
+             xhr.responseType = "json";
+             xhr.onload = function() {
+            if (xhr.status == 200) {
+                    console.log("envío correcto " + nuevosDatos);
+                     const tabla = xhr.response;
+                     console.log(tabla);
+            } else {
+                     console.log("Error al insertar");
+        }
+    };
+                 xhr.send(nuevosDatos);
+} 
     </script>
 
 </body>
