@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Pokemon</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #4b4848;
+    }
+
+    h1 {
+      text-align: center;
+      color: #000000;
+      margin-top: 20px;
+    }
+
+    button {
+      display: block;
+      margin: 0 auto;
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    #pokemons {
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    #pokemons pre {
+      background-color: #999999;
+      border: 1px solid #ccc;
+      padding: 10px;
+      border-radius: 4px;
+      box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
+      max-width: 600px;
+      margin: 0 auto;
+      overflow-x: auto;
+    }
+  </style>
+</head>
+<body>
+  <h1>Pokémon</h1>
+  <button onclick="solicitud()">Solicitud</button>
+  <div id="pokemons"></div>
+
+  <script>
+    function solicitud() {
+      const xhr = new XMLHttpRequest();
+      xhr.open("GET", "https://pokeapi.co/api/v2/pokemon/pikachu");
+      xhr.responseType = "json";
+      xhr.onload = function() {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+          datosPokemon = xhr.response;
+          toJSON(datosPokemon);
+        } else {
+          console.log("Error: " + xhr.status);
+        }
+      };
+      xhr.send();
+    }
+
+    function toJSON(datosPokemon) {
+      JSONpokemon = JSON.stringify(datosPokemon, null, 2);
+      document.getElementById("pokemons").innerHTML = "<pre>" + JSONpokemon + "</pre>";
+    }
+  </script>
+</body>
+</html>

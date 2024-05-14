@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="titulo">Página con Estilo</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        tr:hover {
+            background-color: #f2f2f2;
+        }
+        #titulo {
+            color: rgb(46, 182, 64);
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1 id="titulo">Usuarios</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Nombre de Usuario</th>
+                <th>Email</th>
+                <th>Dirección</th>
+                <th>Empresa</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Los datos de los usuarios se llenarán aquí -->
+        </tbody>
+    </table>
+    <button onclick="solicitud()">Obtener Usuarios</button>
+    <script>
+        function solicitud() {
+            fetch('https://jsonplaceholder.typicode.com/users')
+                .then(response => response.json())
+                .then(json => {
+                    console.log(json);
+                    agregar(json);
+                });
+        }
+
+        function agregar(datos) {
+            $("tbody").empty();
+            datos.forEach(dato => {
+                $("tbody").append('<tr id="' + dato.id + '" onclick="borrar(' + dato.id + ')">' +
+                    '<td>' + dato.id + '</td>' +
+                    '<td>' + dato.name + '</td>' +
+                    '<td>' + dato.username + '</td>' +
+                    '<td>' + dato.email + '</td>' +
+                    '<td>' + dato.address.street + ' ' + dato.address.suite + ', ' + dato.address.zipcode + '</td>' +
+                    '<td>' + dato.company.name + ' - ' + dato.company.catchPhrase + ' - ' + dato.company.bs + '</td>' +
+                    '</tr>');
+            });
+        }
+    </script>
+</body>
+</html>
