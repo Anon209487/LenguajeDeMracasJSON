@@ -55,18 +55,18 @@
 </form>
 
 <script>
-// Esta función convierte un objeto JavaScript en una cadena JSON.  !!!!!!(usar antes de enviar simpre al enviar un objeto no se puede enviar un objeto javascrip)
+// Esta función convierte un objeto JavaScript en una cadena JSON.
 function toJSON(usuarios) {
     return JSON.stringify(usuarios);
 }
 
-// Esta función convierte una cadena JSON en un objeto JavaScript.   !!!(no es nesesario se peude trabajar con el objeto sin swerializar )
+// Esta función convierte una cadena JSON en un objeto JavaScript.
 function toObject(toJSON) {
     return JSON.parse(toJSON);
 }
 
 // Esta función se ejecuta cuando se hace clic en el botón "Agregar Producto".
-// Recolecta los datos del formulario, los convierte en JSON y los envía al servidor.   (crea un objeto javascrip y los covierte en jason es necesario los id son respectivos al formulario)
+// Recolecta los datos del formulario, los convierte en JSON y los envía al servidor.
 function producto() {
     const objeto = {
         descripcion: $("#descripcion").val(),
@@ -78,23 +78,24 @@ function producto() {
 }
 
 // Esta función se encarga de enviar los datos al servidor mediante una solicitud POST.
-// Luego, muestra un mensaje de éxito y actualiza la tabla con los nuevos datos.    (envia un objeto jason al sevidor xhr.readyState == 4 && xhr.status == 200 es lo que devuelve la pagina si la conexion es correcta si devuelve cualquier otro valor se esta enviado un objeto erroneo o la url es incorrecta ))
+// Luego, muestra un mensaje de éxito y actualiza la tabla con los nuevos datos.
 function envio(nuevosDatos) {
     const xhr = new XMLHttpRequest();
     xhr.open("POST", "https://lm.iesnervion.es/reto4.php");
     xhr.responseType = "json";
     xhr.onload = function() {
-        if (xhr.readyState == 4 && xhr.status == 200) {
+        if (xhr.status == 200) {
             console.log("envío correcto " + nuevosDatos);
             const tabla = xhr.response;
-            comprobarError(tabla);
-            imprimirTablaRecivida(tabla);
+            comprobar(tabla);
+            console.log(tabla);
+            agregar(tabla);
         } else {
             console.log("Error al insertar");
         }
     };
     xhr.send(nuevosDatos);
-}
+} 
 
 // Esta función se ejecuta cuando se hace clic en una fila de la tabla.
 // Envía una solicitud DELETE al servidor para eliminar el producto seleccionado.
@@ -114,7 +115,7 @@ function borrar(id) {
 }
 
 // Esta función se encarga de hacer una solicitud GET al servidor para obtener los datos de los productos.
-// Luego, muestra los productos en la tabla.      (recive un objeto json de la pagina importante hay que cocnocer su estructura para acceder a sus valores si accedes mal lanza un error de no estar defindo ))
+// Luego, muestra los productos en la tabla.
 function solicitud() {
     const xhr = new XMLHttpRequest();
     xhr.open("GET", "https://lm.iesnervion.es/reto4.php");
@@ -123,7 +124,7 @@ function solicitud() {
         if (xhr.readyState == 4 && xhr.status == 200) {
             datos = xhr.response;
             console.log("envío correcto " + datos);
-            imprimirTablaRecivida(datos);
+            agregar(datos);
         } else {
             console.log("Error: " + xhr.status);
         }
@@ -131,8 +132,8 @@ function solicitud() {
     xhr.send();
 }
 
-// Esta función se encarga de mostrar los productos en la tabla.  ( en este caso es un bucle con un arry el array es datos y el resto son sus atributos para trabajar con indices y un for consular el ejercicio de pokemons )
-function imprimirTablaRecivida(datos) {
+// Esta función se encarga de mostrar los productos en la tabla.
+function agregar(datos) {
     $("tbody").empty();
     datos.lista.forEach(dato => {
         $("tbody").append('<tr id="' + dato.id + '" onclick="borrar(' + dato.id + ')">' +
@@ -145,10 +146,9 @@ function imprimirTablaRecivida(datos) {
 }
 
 // Esta función se encarga de mostrar un mensaje de error o éxito según la respuesta del servidor.
-function comprobarError(tabla) {
+function comprobar(tabla) {
     if (tabla.error != "") {
         $("#error").html("<h2 style='color:red;'>" + tabla.error + "</h2>");
-        console.log(tabla);
     } else {
         $("#error").html("<h2 style='color:green;'>Correcto</h2>");
     }
