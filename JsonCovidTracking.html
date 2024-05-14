@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Datos COVID-19</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f5f5f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      max-width: 800px;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 10px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+
+    th {
+      background-color: #f2f2f2;
+      color: #333;
+    }
+
+    tbody tr:hover {
+      background-color: #f9f9f9;
+    }
+
+    button {
+      display: block;
+      margin: 20px auto;
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Datos COVID-19</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Positive</th>
+                <th>Probable Cases</th>
+                <th>Negative</th>
+                <th>Check Time</th>
+                <th>Death</th>
+                <th>Hospitalized</th>
+                <th>Negative Tests</th>
+            </tr>
+        </thead>
+        <tbody>
+     
+        </tbody>
+    </table>
+
+    <button onclick="solicitud()">Actualizar Datos</button>
+  </div>
+
+  <script>
+    function solicitud() {
+      const xhr = new XMLHttpRequest();
+      xhr.open("GET", "https://api.covidtracking.com/v1/states/current.json");
+      xhr.responseType = "json";
+      xhr.onload = function() {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+          datosCovid = xhr.response;
+          console.log(datosCovid);
+          agregar(datosCovid);
+        } else {
+          console.log("Error: " + xhr.status);
+        }
+      };
+      xhr.send();
+    }
+
+    function agregar(datos) {
+      $("tbody").empty();
+      datos.forEach(dato => {
+        $("tbody").append('<tr id="' + dato.date + '" onclick="borrar(' + dato.id + ')">' +
+          '<td>' + dato.date + '</td>' +
+          '<td>' + dato.positive + '</td>' +
+          '<td>' + dato.probableCases + '</td>' +
+          '<td>' + dato.negative + '</td>' +
+          '<td>' + dato.checkTimeEt + '</td>' +
+          '<td>' + dato.death + '</td>' +
+          '<td>' + dato.hospitalized + '</td>' +
+          '<td>' + dato.negativeTestsViral + '</td>' +
+          '</tr>');
+      });
+    }
+  </script>
+</body>
+</html>

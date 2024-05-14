@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="titulo">Página</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        tr:hover {
+            background-color: #f2f2f2;
+        }
+        #titulo {
+            color: rgb(46, 182, 64);
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1 id="titulo">datos:</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>userId</th>
+                <th>id</th>
+                <th>title</th>
+                <th>body</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    <button onclick="solicitud()">Obtener datos</button>
+    <script>
+        function solicitud() {
+            fetch('https://jsonplaceholder.typicode.com/posts')
+                .then(response => response.json())
+                .then(json => {
+                    console.log(json);
+                    agregar(json) ;
+                });
+        }
+
+        function agregar(datos) {
+            $("tbody").empty();
+            datos.forEach(dato => {
+                $("tbody").append('<tr id="' + dato.id + '" onclick="borrar(' + dato.id + ')">' +
+                    '<td>' + dato.userId + '</td>' +
+                    '<td>' + dato.id + '</td>' +
+                    '<td>' + dato.title + '</td>' +
+                    '<td>' + dato.body + '</td>' +
+                    '</tr>');
+            });
+        }
+    </script>
+</body>
+</html>
